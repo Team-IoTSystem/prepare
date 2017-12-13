@@ -10,7 +10,7 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y git hostapd bridge-utils
 sudo systemctl stop hostapd
-###############   mysql-server書き方わからない(ごめんなさい)
+###############   mysql-server導入時のpassword処理らへん　書き方わからない(ごめんなさい)
 
 #eth0 name set
 #MACアドレスの取得が必要　(未実装)
@@ -20,7 +20,7 @@ sudo echo -e "/etc/nSUBSYSTEM==\"net\", ACTION==\"add\", DRIVERS==\"?*\", ATTR{a
 # Bridge Connection
 sudo echo -e "denyinterfaces wlan0 eth0" >> /etc/dhcpcd.conf
 sudo brctl addbr br0
-sudo brctl addif br0 eth0 wlan0
+sudo brctl addif br0 eth0 wlan0　#すでにここでダメっぽい
 cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
 	auto br0
@@ -32,10 +32,10 @@ cat <<- EOF >> /etc/network/interfaces
 
 
 # Static IP Address
-#TODO:IPアドレス書き換え
+#IPアドレス任意
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
-	static ip_address=10.0.0.1
+	static ip_address=10.0.100.1
 	static routers=192.168.0.1
 	static domain_name_servers=192.168.0.1
 	EOF
