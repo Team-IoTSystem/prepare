@@ -10,6 +10,7 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y git hostapd bridge-utils
 sudo systemctl stop hostapd
+
 ###############   mysql-server導入時のpassword処理らへん　書き方わからない(ごめんなさい)
 
 #eth0 name set
@@ -25,9 +26,7 @@ cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
 	auto br0
 	iface br0 inet manual
-	bridge_ports eth0, wlan0
-	bridge_stp off
-	bridge_maxwait 3
+	bridge_ports eth0 wlan0
 	EOF
 
 
