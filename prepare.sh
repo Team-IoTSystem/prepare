@@ -34,7 +34,7 @@ cat <<- EOF >> /etc/network/interfaces
 #IPアドレス任意
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
-	static ip_address=10.0.100.1
+	static ip_address=192.168.100.1
 	static routers=192.168.0.1
 	static domain_name_servers=192.168.0.1
 	EOF
@@ -55,7 +55,7 @@ cat <<- EOF >> /etc/hostapd/hostapd.conf
 	ieee80211n=1
 	ignore_broadcast_ssid=0
 	wpa=2
-	wpa_passphrase=Yorunohoshiwo
+	wpa_passphrase=yorunohoshiwo
 	wpa_key_mgmt=WPA-PSK
 	wpa_pairwise=TKIP
 	rsn_pairwise=CCMP
