@@ -10,59 +10,57 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y git hostapd bridge-utils
 sudo systemctl stop hostapd
+###############   mysql-server書き方わからない(ごめんなさい)
 
-###############   mysql-server導入時のpassword処理らへん　書き方わからない(ごめんなさい)
-
-#eth0 name set
-#MACアドレスの取得が必要　(未実装)
-sudo echo -e "/etc/nSUBSYSTEM==\"net\", ACTION==\"add\", DRIVERS==\"?*\", ATTR{address}==\"xx:xx:xx:xx:xx:xx\", ATTR{dev_id}==\"0x0\", ATTR{type}==\"1\", KERNEL==\"eth*\", NAME=\"eth0\"" > /etc/udev/rules.d/70-persistent-net.rules
-
-
-# Bridge Connection
-sudo echo -e "denyinterfaces wlan0 eth0" >> /etc/dhcpcd.conf
-sudo brctl addbr br0
-sudo brctl addif br0 eth0 wlan0　#すでにここでダメっぽい
-cat <<- EOF >> /etc/network/interfaces
-	# Bridge setup
-	auto br0
-	iface br0 inet manual
-	bridge_ports eth0 wlan0
-	EOF
 
 
 # Static IP Address
-#IPアドレス任意
+#TODO:IPアドレス書き換え(入力制にすべき？)
+sudo echo -e "net.ifname=0" >> /boot/cmdline.txt
+sudo echo -e "denyinterfaces wlan0 eth0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
-	interface br0
-	static ip_address=192.168.100.1
+	interface eth0
+	static ip_address=192.168.100.1/24
 	static routers=192.168.0.1
 	static domain_name_servers=192.168.0.1
 	EOF
 
 
+
+# Bridge Connection
+cat <<- EOF >> /etc/network/interfaces
+	# Bridge setup
+	auto br0
+	iface br0 inet dhcp
+	bridge_ports eth0, wlan0
+	bridge_stp off
+	EOF
+sudo ifdown br0
+sudo ifup br0
+
+
+
 # Access Point
 #(pass直書きはどうなのか)
+sudo bash -c "zcat /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf"
+sudo chmod 600 /etc/hostapd/hostapd.conf
+sudo sed -e "/channnel/d" -e "/auth_algs/d" -e "/ssid/d" -e "/interface/d" /etc/hostapd/hostapd.conf
 cat <<- EOF >> /etc/hostapd/hostapd.conf
 	interface=wlan0
 	bridge=br0
 	driver=nl80211
 	ssid=Miagete-goLAN
-	hw_mode=g
 	channel=7
-	wmm_enabled=0
-	macaddr_acl=0
 	auth_algs=1
 	ieee80211n=1
-	ignore_broadcast_ssid=0
 	wpa=2
 	wpa_passphrase=yorunohoshiwo
 	wpa_key_mgmt=WPA-PSK
-	wpa_pairwise=TKIP
 	rsn_pairwise=CCMP
 	EOF
-sed -e "s/#DAEMON_CONF/DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"/" /etc/default/hostapd
+sudo sed -e "s@#DAEMON_CONF@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
 sudo service hostapd start
-sudo service dnsmasq start
+
 
 
 # Go環境
@@ -77,7 +75,8 @@ cat <<- EOF >> $HOME/.bashrc
 
 
 
-#TODO:githubから持ってくる処理↓
+
+#TODO:githubから $HOME/IoT-System へ持ってくる処理↓
 
 
 
