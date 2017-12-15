@@ -8,7 +8,7 @@
 #TODO:洗い出し
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get install -y git hostapd bridge-utils
+sudo apt-get install -y hostapd bridge-utils git
 sudo systemctl stop hostapd
 ###############   mysql-server書き方わからない(ごめんなさい)
 
@@ -16,13 +16,12 @@ sudo systemctl stop hostapd
 
 # Static IP Address
 #TODO:IPアドレス書き換え(入力制にすべき？)
-sudo echo -e "net.ifname=0" >> /boot/cmdline.txt
-sudo echo -e "denyinterfaces wlan0 eth0" >> /etc/dhcpcd.conf
+echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
+# sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
-	interface eth0
-	static ip_address=192.168.100.1/24
-	static routers=192.168.0.1
-	static domain_name_servers=192.168.0.1
+	static ip_address=10.0.0.2/24
+	static routers=192.168.48.1
+	static domain_name_servers=192.168.48.1
 	EOF
 
 
@@ -35,7 +34,6 @@ cat <<- EOF >> /etc/network/interfaces
 	bridge_ports eth0, wlan0
 	bridge_stp off
 	EOF
-sudo ifdown br0
 sudo ifup br0
 
 
@@ -44,7 +42,8 @@ sudo ifup br0
 #(pass直書きはどうなのか)
 sudo bash -c "zcat /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf"
 sudo chmod 600 /etc/hostapd/hostapd.conf
-sudo sed -e "/channnel/d" -e "/auth_algs/d" -e "/ssid/d" -e "/interface/d" /etc/hostapd/hostapd.conf
+sudo grep -v '^\s*#' /etc/hostapd/hostapd.conf | grep -v '^\s*$' | sudo tee /etc/hostapd/hostapd.conf
+sudo sed -i -e "/channel=1/d" -e "/auth_algs/d" -e "/ssid/d" -e "/interface/d" /etc/hostapd/hostapd.conf
 cat <<- EOF >> /etc/hostapd/hostapd.conf
 	interface=wlan0
 	bridge=br0
@@ -58,7 +57,7 @@ cat <<- EOF >> /etc/hostapd/hostapd.conf
 	wpa_key_mgmt=WPA-PSK
 	rsn_pairwise=CCMP
 	EOF
-sudo sed -e "s@#DAEMON_CONF@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
+sed -i -e "s@#DAEMON_CONF@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
 sudo service hostapd start
 
 
