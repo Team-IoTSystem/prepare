@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #  Setup Vortoj-IoTSystem
-#  Update: 2017/12/13
+#  Update: 2017/12/16
 #  Raspbian Nov.2017
 
 
@@ -14,26 +14,13 @@ sudo systemctl stop hostapd
 ###############   mysql-server 
 
 
-# Static IP Address
-#TODO:IPアドレス書き換え(入力制にすべき)
-echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
-# sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
-cat <<- EOF >> /etc/dhcpcd.conf
-	interface br0
-	static ip_address=192.168.100.2/24
-	static routers=192.168.0.1
-	static domain_name_servers=192.168.0.1
-	EOF
-
-
 
 # Bridge Connection
 cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
 	auto br0
 	iface br0 inet dhcp
-	bridge_ports eth0, wlan0
-	bridge_stp off
+	bridge_ports eth0 wlan0
 	EOF
 sudo ifup br0
 
@@ -58,8 +45,21 @@ cat <<- EOF >> /etc/hostapd/hostapd.conf
 	wpa_key_mgmt=WPA-PSK
 	rsn_pairwise=CCMP
 	EOF
-sed -i -e "s@#DAEMON_CONF@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
+sudo sed -i -e "s@#DAEMON_CONF@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
 sudo service hostapd start
+
+
+
+# Static IP Address
+#TODO:IPアドレス書き換え(入力制にすべき？)
+# echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
+# sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
+cat <<- EOF >> /etc/dhcpcd.conf
+	interface br0
+	static ip_address=192.168.100.100/24
+	static routers=192.168.48.1
+	static domain_name_servers=192.168.48.1
+	EOF
 
 
 
