@@ -4,24 +4,25 @@
 #  Update: 2017/12/13
 #  Raspbian Nov.2017
 
+
 # Install
 #TODO:洗い出し
 sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git
 sudo systemctl stop hostapd
-###############   mysql-server書き方わからない(ごめんなさい)
-
+###############   mysql-server 
 
 
 # Static IP Address
-#TODO:IPアドレス書き換え(入力制にすべき？)
+#TODO:IPアドレス書き換え(入力制にすべき)
 echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
 # sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
-	static ip_address=10.0.0.2/24
-	static routers=192.168.48.1
-	static domain_name_servers=192.168.48.1
+	interface br0
+	static ip_address=192.168.100.2/24
+	static routers=192.168.0.1
+	static domain_name_servers=192.168.0.1
 	EOF
 
 
@@ -71,7 +72,6 @@ cat <<- EOF >> $HOME/.bashrc
 	export GOPATH=$HOME/IoT-System
 	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 	EOF
-
 
 
 
