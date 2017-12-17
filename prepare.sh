@@ -1,9 +1,40 @@
 #!/bin/sh
 
+set -Ceu
+
 #  Setup Vortoj-IoTSystem
 #  Update: 2017/12/16
 #  Raspbian Nov.2017
 
+
+CMDNAME=`basename $0`
+
+br="192.168.100.100"
+ssid="Miagete-goLAN"
+password="yorunohoshiwo"
+
+while getopts e:w:h OPT
+do
+  case $OPT in
+	b) br="$OPTARG" ;;
+    p) password="$OPTARG" ;;
+	s) ssid="$OPTARG" ;;      
+    h) abort "Usage: $CMDNAME  [-b bridge_ip(default:$br)] [-s wifi ssid(default:$ssid) ]  [-p wifi passphrase(default:$password) ]  " ;;
+  esac
+done
+
+cat <<- EOF
+	your setting on
+	
+	bridge
+		ip: $br
+	
+	wifis:
+		ssid: $ssid
+		password: $password
+EOF
+
+sudo ifup br0
 
 # Install
 #TODO:洗い出し
@@ -12,7 +43,6 @@ sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git
 sudo systemctl stop hostapd
 ###############   mysql-server 
-
 
 
 # Bridge Connection
@@ -25,7 +55,6 @@ cat <<- EOF >> /etc/network/interfaces
 sudo ifup br0
 
 
-
 # Access Point
 #(pass直書きはどうなのか)
 sudo bash -c "zcat /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf"
@@ -36,12 +65,12 @@ cat <<- EOF >> /etc/hostapd/hostapd.conf
 	interface=wlan0
 	bridge=br0
 	driver=nl80211
-	ssid=Miagete-goLAN
+	ssid=$ssid
 	channel=7
 	auth_algs=1
 	ieee80211n=1
 	wpa=2
-	wpa_passphrase=yorunohoshiwo
+	wpa_passphrase=$password
 	wpa_key_mgmt=WPA-PSK
 	rsn_pairwise=CCMP
 	EOF
@@ -56,9 +85,9 @@ sudo service hostapd start
 # sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
-	static ip_address=192.168.100.100/24
-	static routers=192.168.48.1
-	static domain_name_servers=192.168.48.1
+	static ip_address={$br}/24
+	static routers=${br%.*}.1
+	static domain_name_servers=${br%.*}.1
 	EOF
 
 
@@ -76,7 +105,6 @@ cat <<- EOF >> $HOME/.bashrc
 
 
 #TODO:githubから $HOME/IoT-System へ持ってくる処理↓
-
 
 
 #Cleanup
