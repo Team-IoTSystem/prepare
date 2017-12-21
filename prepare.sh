@@ -34,7 +34,7 @@ cat <<- EOF
 		password: $password
 EOF
 
-sudo ifup br0
+sudo brctl addbr br0
 
 # Install
 #TODO:洗い出し
@@ -43,40 +43,6 @@ sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git
 sudo systemctl stop hostapd
 ###############   mysql-server 
-
-
-# Bridge Connection
-cat <<- EOF >> /etc/network/interfaces
-	# Bridge setup
-	auto br0
-	iface br0 inet dhcp
-	bridge_ports eth0 wlan0
-	EOF
-sudo ifup br0
-
-
-# Access Point
-#(pass直書きはどうなのか)
-sudo bash -c "zcat /usr/share/doc/hostapd/examples/hostapd.conf.gz > /etc/hostapd/hostapd.conf"
-sudo chmod 600 /etc/hostapd/hostapd.conf
-sudo grep -v '^\s*#' /etc/hostapd/hostapd.conf | grep -v '^\s*$' | sudo tee /etc/hostapd/hostapd.conf
-sudo sed -i -e "/channel=1/d" -e "/auth_algs/d" -e "/ssid/d" -e "/interface/d" /etc/hostapd/hostapd.conf
-cat <<- EOF >> /etc/hostapd/hostapd.conf
-	interface=wlan0
-	bridge=br0
-	driver=nl80211
-	ssid=$ssid
-	channel=7
-	auth_algs=1
-	ieee80211n=1
-	wpa=2
-	wpa_passphrase=$password
-	wpa_key_mgmt=WPA-PSK
-	rsn_pairwise=CCMP
-	EOF
-sudo sed -i -e "s@#DAEMON_CONF@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
-sudo service hostapd start
-
 
 
 # Static IP Address
@@ -89,7 +55,38 @@ cat <<- EOF >> /etc/dhcpcd.conf
 	static routers=${br%.*}.1
 	static domain_name_servers=${br%.*}.1
 	EOF
+sudo service dhcpcd reload
 
+
+# Access Point
+cat <<- EOF > /etc/hostapd/hostapd.conf
+	interface=wlan0
+	bridge=br0
+	#driver=nl80211
+	ssid=Miagete-goLAN
+	hw_mode=g
+	channel=7
+	wmm_enabled=0
+	macaddr_acl=0
+	auth_algs=1
+	ignore_broadcast_ssid=0
+	wpa=2
+	wpa_passphrase=yorunohoshiwo
+	wpa_key_mgmt=WPA-PSK
+	wpa_pairwise=TKIP
+	rsn_pairwise=CCMP
+	EOF
+sudo sed -i -e "s@#DAEMON_CONF=""@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
+
+
+# Bridge Connection
+sudo brctl addif br0 eth0
+cat <<- EOF >> /etc/network/interfaces
+	# Bridge setup
+	auto br0
+	iface br0 inet manual
+	bridge_ports eth0 wlan0
+	EOF
 
 
 # Go環境
@@ -101,7 +98,6 @@ cat <<- EOF >> $HOME/.bashrc
 	export GOPATH=$HOME/IoT-System
 	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 	EOF
-
 
 
 #TODO:githubから $HOME/IoT-System へ持ってくる処理↓
