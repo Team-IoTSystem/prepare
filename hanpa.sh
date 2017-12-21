@@ -12,7 +12,7 @@ sudo systemctl stop hostapd
 #sudo echo -e "denyinterfaces wlan0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
-	static ip_address=10.0.0.1/8
+	static ip_address=192.168.0.99/24
 	static routers=192.168.0.1
 	static domain_name_servers=192.168.0.1
 
@@ -47,7 +47,7 @@ sudo brctl addif br0 eth0
 cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
 	auto br0
-	iface br0 inet manual
+	iface br0 inet static
 	bridge_ports eth0 wlan0
 	EOF
 
