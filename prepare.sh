@@ -34,8 +34,6 @@ cat <<- EOF
 		password: $password
 EOF
 
-sudo brctl addbr br0
-
 # Install
 #TODO:洗い出し
 sudo apt-get update
@@ -47,8 +45,7 @@ sudo systemctl stop hostapd
 #sudo apt-get -y install mysql-server-5.7
 #sudo systemctl enable mysql
 
- 
-
+sudo brctl addbr br0
 
 # Static IP Address
 # echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
