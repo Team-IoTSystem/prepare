@@ -42,7 +42,12 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git
 sudo systemctl stop hostapd
-###############   mysql-server 
+echo "mysql-server-5.7 mysql-server/root_password passpass" | debconf-set-selections
+echo "mysql-server-5.7 mysql-server/root_password_again password passpass" | debconf-set-selections
+sudo apt-get -y install mysql-server-5.7
+sudo systemctl enable mysql
+
+ 
 
 
 # Static IP Address
