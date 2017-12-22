@@ -46,7 +46,6 @@ sudo systemctl stop hostapd
 
 
 # Static IP Address
-#TODO:IPアドレス書き換え(入力制にすべき？)
 # echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
 # sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
