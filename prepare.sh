@@ -63,7 +63,7 @@ cat <<- EOF > /etc/hostapd/hostapd.conf
 	interface=wlan0
 	bridge=br0
 	#driver=nl80211
-	ssid=Miagete-goLAN
+	ssid=$ssid
 	hw_mode=g
 	channel=7
 	wmm_enabled=0
@@ -71,7 +71,7 @@ cat <<- EOF > /etc/hostapd/hostapd.conf
 	auth_algs=1
 	ignore_broadcast_ssid=0
 	wpa=2
-	wpa_passphrase=yorunohoshiwo
+	wpa_passphrase=$password
 	wpa_key_mgmt=WPA-PSK
 	wpa_pairwise=TKIP
 	rsn_pairwise=CCMP
