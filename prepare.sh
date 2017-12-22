@@ -83,7 +83,7 @@ sudo brctl addif br0 eth0
 cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
 	auto br0
-	iface br0 inet manual
+	iface br0 inet static
 	bridge_ports eth0 wlan0
 	EOF
 
