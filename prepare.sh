@@ -66,7 +66,7 @@ sudo brctl addbr br0
 # sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
-	static ip_address={$br}/24
+	static ip_address=$br/24
 	static routers=${br%.*}.1
 	static domain_name_servers=${br%.*}.1
 	EOF
@@ -99,7 +99,7 @@ sudo brctl addif br0 eth0
 cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
 	auto br0
-	iface br0 inet static
+	iface br0 inet manual
 	bridge_ports eth0 wlan0
 	EOF
 
