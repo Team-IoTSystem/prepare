@@ -50,7 +50,7 @@ sudo systemctl stop hostapd
 #(多分色々足りてない)
 wget https://storage.googleapis.com/golang/go1.9.2.linux-armv6l.tar.gz
 sudo tar -C /usr/local -xzf go1.9.2.linux-armv6l.tar.gz
-mkdir 
+mkdir IoT-System
 sudo chmod 765 /usr/local/go
 cat <<- EOF >> $HOME/.bashrc
 	export GOROOT=/usr/local/go
