@@ -52,11 +52,11 @@ wget https://storage.googleapis.com/golang/go1.9.2.linux-armv6l.tar.gz
 sudo tar -C /usr/local -xzf go1.9.2.linux-armv6l.tar.gz
 mkdir IoT-System
 sudo chmod 765 /usr/local/go
-cat <<- `EOF` >> $HOME/.bashrc
-	export GOROOT=/usr/local/go
-	export GOPATH=$HOME/IoT-System
-	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-	`EOF`
+tee $HOME/.bashrc << `EOF`
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/IoT-System
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+`EOF`
 
 
 sudo brctl addbr br0
