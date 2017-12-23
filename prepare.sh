@@ -9,7 +9,7 @@ set -Ceu
 
 CMDNAME=`basename $0`
 
-br="192.168.36.111"
+br="192.168.1.111"
 ssid="Miagete-goLAN"
 password="yorunohoshiwo"
 
@@ -52,7 +52,7 @@ wget https://storage.googleapis.com/golang/go1.9.2.linux-armv6l.tar.gz
 sudo tar -C /usr/local -xzf go1.9.2.linux-armv6l.tar.gz
 mkdir IoT-System
 sudo chmod 765 /usr/local/go
-cat <<- `EOF` >> $HOME/.bashrc
+cat <<- `EOF` >> $HOME/.bash_profile
 	export GOROOT=/usr/local/go
 	export GOPATH=$HOME/IoT-System
 	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
