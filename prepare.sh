@@ -3,13 +3,13 @@
 set -Ceu
 
 #  Setup Vortoj-IoTSystem
-#  Update: 2017/12/16
+#  Update: 2017/12/23
 #  Raspbian Nov.2017
 
 
 CMDNAME=`basename $0`
 
-br="192.168.100.100"
+br="192.168.36.111"
 ssid="Miagete-goLAN"
 password="yorunohoshiwo"
 
@@ -63,7 +63,7 @@ sudo brctl addbr br0
 
 # Static IP Address
 # echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
-# sudo echo -e "denyinterfaces eth0" >> /etc/dhcpcd.conf
+# sudo echo -e "denyinterfaces eth0 wlan0" >> /etc/dhcpcd.conf
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
 	static ip_address=$br/24
