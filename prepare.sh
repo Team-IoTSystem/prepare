@@ -40,10 +40,11 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git
 sudo systemctl stop hostapd
-sudo debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password password P@ssw0rd'
-sudo debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password_again password P@ssw0rd'
-sudo apt-get -y install mysql-server-5.7
+sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password P@ssw0rd'
+sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password P@ssw0rd'
+sudo apt-get -y install mysql-server
 sudo systemctl enable mysql
+sudo service mysqld restart
 
 
 cat <<- EOF >> /etc/my.conf
