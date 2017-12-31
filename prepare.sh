@@ -43,10 +43,6 @@ sudo systemctl stop hostapd
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password P@ssw0rd'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password P@ssw0rd'
 sudo apt-get -y install mysql-server
-sudo rm /etc/systemd/system/mysqld.service
-sudo systemctl enable mysql
-sudo service mysqld restart
-
 
 cat <<- EOF >> /etc/my.conf
 	[mysqld]
@@ -62,7 +58,7 @@ wget https://storage.googleapis.com/golang/go1.9.2.linux-armv6l.tar.gz
 sudo tar -C /usr/local -xzf go1.9.2.linux-armv6l.tar.gz
 mkdir IoT-System
 sudo chmod 765 /usr/local/go
-sudo -u pi cat <<- `EOF` >> $HOME/.bash_profile
+sudo cat <<- `EOF` >> $HOME/.bashrc
 	export GOROOT=/usr/local/go
 	export GOPATH=$HOME/IoT-System
 	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
