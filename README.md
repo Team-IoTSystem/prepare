@@ -2,4 +2,5 @@
 
 セットアップ用スクリプト。
 
-カーネルが死んだ
+`chmod u+x prepare.sh`<br>
+`sudo -E ./prepare.sh`
