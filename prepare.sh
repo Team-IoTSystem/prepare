@@ -9,7 +9,7 @@ set -Ceu
 
 CMDNAME=`basename $0`
 
-br="192.168.1.111"
+br="192.168.10.111"
 ssid="Miagete-goLAN"
 password="yorunohoshiwo"
 
@@ -44,6 +44,7 @@ sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password pas
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password P@ssw0rd'
 sudo apt-get -y install mysql-server
 sudo systemctl enable mysql
+sudo rm /etc/systemd/system/mysqld.service
 sudo service mysqld restart
 
 
