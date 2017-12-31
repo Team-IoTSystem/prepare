@@ -43,8 +43,8 @@ sudo systemctl stop hostapd
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password P@ssw0rd'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password P@ssw0rd'
 sudo apt-get -y install mysql-server
-sudo systemctl enable mysql
 sudo rm /etc/systemd/system/mysqld.service
+sudo systemctl enable mysql
 sudo service mysqld restart
 
 
