@@ -108,9 +108,7 @@ cat <<- EOF >> /etc/network/interfaces
 	bridge_ports eth0 wlan0
 	EOF
 
-
-#TODO:githubから $HOME/IoT-System へ持ってくる処理↓
-
+sudo -u pi git clone --branch master --single-branch --depth=1 https://github.com/Team-IoTSystem/Vortoj.git
 
 #Cleanup
 sudo apt-get autoremove
