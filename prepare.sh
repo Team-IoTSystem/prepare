@@ -98,7 +98,7 @@ cat <<- EOF > /etc/hostapd/hostapd.conf
 	wpa_pairwise=TKIP
 	rsn_pairwise=CCMP
 	EOF
-sudo sed -i -e "s@#DAEMON_CONF=""@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
+sudo sed -i -e "s@#DAEMON_CONF=\"\"@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
 
 
 # Bridge Setup
