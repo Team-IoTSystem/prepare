@@ -3,7 +3,7 @@
 set -Ceu
 
 #  Setup Vortoj-IoTSystem
-#  Update: 2017/12/23
+#  Update: 2018/01/04
 #  Raspbian Nov.2017
 
 
@@ -35,15 +35,13 @@ cat <<- EOF
 EOF
 
 # Install
-#TODO:洗い出し
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get install -y hostapd bridge-utils git
+sudo apt-get install -y hostapd bridge-utils git vim tmux libpcap-dev
 sudo systemctl stop hostapd
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password P@ssw0rd'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password P@ssw0rd'
 sudo apt-get -y install mysql-server
-
 cat <<- EOF >> /etc/my.conf
 	[mysqld]
 	character-set-server=utf8
@@ -52,8 +50,7 @@ cat <<- EOF >> /etc/my.conf
 	EOF
 
 
-# Go環境
-#(多分色々足りてない)
+# Golang
 wget https://storage.googleapis.com/golang/go1.9.2.linux-armv6l.tar.gz
 sudo tar -C /usr/local -xzf go1.9.2.linux-armv6l.tar.gz
 sudo -u pi mkdir IoT-System
@@ -63,12 +60,14 @@ sudo cat <<- `EOF` >> $HOME/.bashrc
 	export GOPATH=$HOME/IoT-System
 	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 	`EOF`
+sudo ln -s /usr/local/go/bin/o /usr/bin/go
+sudo -u pi git clone --branch master --single-branch --depth=1 https://github.com/Team-IoTSystem/Vortoj.git $HOME/IoT-System
+go get github.com/go-sql-driver/mysql github.com/gocraft/dbr github.com/google/gopacket github.com/labstack/echo github.com/labstack/gommon github.com/gorilla/websocket github.com/dgrijalva/jwt-go
 
 
-sudo brctl addbr br0
 # Static IP Address
-# echo -e "net.ifname=0" | sudo tee /boot/cmdline.txt
 # sudo echo -e "denyinterfaces eth0 wlan0" >> /etc/dhcpcd.conf
+sudo brctl addbr br0
 cat <<- EOF >> /etc/dhcpcd.conf
 	interface br0
 	static ip_address=$br/24
@@ -99,7 +98,7 @@ cat <<- EOF > /etc/hostapd/hostapd.conf
 sudo sed -i -e "s@#DAEMON_CONF=""@DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"@" /etc/default/hostapd
 
 
-# Bridge Connection
+# Bridge Setup
 sudo brctl addif br0 eth0
 cat <<- EOF >> /etc/network/interfaces
 	# Bridge setup
@@ -108,7 +107,6 @@ cat <<- EOF >> /etc/network/interfaces
 	bridge_ports eth0 wlan0
 	EOF
 
-sudo -u pi git clone --branch master --single-branch --depth=1 https://github.com/Team-IoTSystem/Vortoj.git
 
 #Cleanup
 sudo apt-get autoremove
