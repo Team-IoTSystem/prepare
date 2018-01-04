@@ -62,6 +62,9 @@ sudo cat <<- `EOF` >> $HOME/.bashrc
 	`EOF`
 sudo ln -s /usr/local/go/bin/o /usr/bin/go
 sudo -u pi git clone --branch master --single-branch --depth=1 https://github.com/Team-IoTSystem/Vortoj.git $HOME/IoT-System
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/IoT-System
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 go get github.com/go-sql-driver/mysql github.com/gocraft/dbr github.com/google/gopacket github.com/labstack/echo github.com/labstack/gommon github.com/gorilla/websocket github.com/dgrijalva/jwt-go
 
 
