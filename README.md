@@ -5,3 +5,6 @@
 
 `chmod u+x prepare.sh`<br>
 `sudo -E ./prepare.sh`
+
+Packet filter実行時は
+`sudo -E go run main.go`
