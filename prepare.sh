@@ -60,7 +60,7 @@ sudo cat <<- `EOF` >> $HOME/.bashrc
 	export GOPATH=$HOME/IoT-System
 	export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 	`EOF`
-sudo ln -s /usr/local/go/bin/o /usr/bin/go
+sudo ln -s /usr/local/go/bin/go /usr/bin/go
 sudo -u pi git clone --branch master --single-branch --depth=1 https://github.com/Team-IoTSystem/Vortoj.git $HOME/IoT-System
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/IoT-System
