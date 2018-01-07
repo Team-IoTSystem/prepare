@@ -37,11 +37,8 @@ EOF
 # Install
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get install -y hostapd bridge-utils git vim tmux libpcap-dev
+sudo apt-get install -y hostapd bridge-utils git vim tmux libpcap-dev mariadb-server mariadb-client python-mysqldb 
 sudo systemctl stop hostapd
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password P@ssw0rd'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password P@ssw0rd'
-sudo apt-get -y install mysql-server
 cat <<- EOF >> /etc/my.conf
 	[mysqld]
 	character-set-server=utf8
