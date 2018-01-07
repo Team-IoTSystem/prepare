@@ -39,8 +39,8 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git vim tmux libpcap-dev
 sudo systemctl stop hostapd
-sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password P@ssw0rd'
-sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password P@ssw0rd'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password P@ssw0rd'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password P@ssw0rd'
 sudo apt-get -y install mysql-server
 cat <<- EOF >> /etc/my.conf
 	[mysqld]
