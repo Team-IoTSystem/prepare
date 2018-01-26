@@ -9,7 +9,7 @@ set -Ceu
 
 CMDNAME=`basename $0`
 
-br="192.168.10.111"
+br="192.168.48.111"
 ssid="Miagete-goLAN"
 password="yorunohoshiwo"
 
@@ -39,12 +39,6 @@ sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y hostapd bridge-utils git vim tmux libpcap-dev mariadb-server mariadb-client python-mysqldb 
 sudo systemctl stop hostapd
-cat <<- EOF >> /etc/my.conf
-	[mysqld]
-	character-set-server=utf8
-	[client]
-	default-character-set=utf8
-	EOF
 
 
 # Golang
