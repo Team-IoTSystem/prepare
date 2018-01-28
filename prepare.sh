@@ -9,7 +9,7 @@ set -Ceu
 
 CMDNAME=`basename $0`
 
-br="192.168.48.111"
+br="192.168.1.111"
 ssid="Miagete-goLAN"
 password="yorunohoshiwo"
 
