@@ -1,8 +1,11 @@
-# prepare
+テスト用環境
+user : pi
+Raspbian Nov.2017
 
-セットアップ用スクリプト。
-12 ~ 14行目をお住まいの環境に合わせてね。
+IPaddressは各自変更すること。
+Vortoj-PacketFilterの en0 を br0 とかにするとよい。
 
+prepare.shを　git clone して他を(?)
 `chmod u+x prepare.sh`<br>
 `sudo -E ./prepare.sh`
 
