@@ -5,7 +5,7 @@ Raspbian Nov.2017
 IPaddressは各自変更すること。
 Vortoj-PacketFilterの en0 を br0 とかにするとよい。
 
-prepare.shを　git clone して他を(?)
+prepare.shを　git clone して他を持ってくる(?)
 `chmod u+x prepare.sh`<br>
 `sudo -E ./prepare.sh`
 
